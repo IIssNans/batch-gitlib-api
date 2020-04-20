@@ -10,6 +10,10 @@ import (
 	"time"
 )
 
+/**
+只能查找2级目录
+
+*/
 func main() {
 	var start = time.Now()
 	pathUrl := "/Users/gopher/zlx/workspace2.0/"

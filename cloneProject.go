@@ -12,6 +12,10 @@ import (
 	"time"
 )
 
+/**
+批量下载所有你拥有的代码，会根据group自动创建目录
+*/
+
 func httpGet(url string) *http.Response {
 	client := &http.Client{}
 	resp, err := client.Get(url)
