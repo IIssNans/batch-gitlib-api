@@ -22,7 +22,6 @@ func httpGet(url string) *http.Response {
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	return resp
 }
 
@@ -44,10 +43,13 @@ func PathExists(path string) bool {
 }
 
 func main() {
+	// token
 	token := "K-c_19vAXjNxnMUFK7RP"
-	ip := "http://XXX"
-	dir := "/Users/gopher/zlx/workspace2.0/"
-
+	// 项目地址
+	ip := "http://10.100.58.218:9004/"
+	// 下载路径 注意结尾处的/
+	dir := "D:/WorkeSpace2.0/"
+	// 获取分组名称
 	url := ip + "/api/v4/namespaces?private_token=" + token
 	var start = time.Now()
 	resp := httpGet(url)
@@ -61,31 +63,31 @@ func main() {
 			var id = d2["id"].(float64)
 			if name != "document" && kind == "group" {
 				groupDir := dir + name
-				// 如果文件夹不存在
+				// 如果文件夹不存在 创建文件夹
 				if !PathExists(groupDir) {
 					err := os.Mkdir(groupDir, os.ModePerm)
 					printError(err)
 				}
+				// 根据项目id获取项目信息
 				purl := ip + "/api/v4/groups/" + strconv.FormatInt(int64(id), 10) + "/projects?private_token=" + token
 				presp := httpGet(purl)
 				pbody, _ := ioutil.ReadAll(presp.Body)
 				var pd []interface{}
 				if err := json.Unmarshal([]byte(string(pbody)), &pd); err == nil {
+					// 下载分组下所有的项目
 					for _, val := range pd {
 						d2 := val.(map[string]interface{})
 						var repo = d2["ssh_url_to_repo"].(string)
-
+						// 克隆项目
 						command := exec.Command("git", "clone", repo) //初始化Cmd
 						command.Dir = groupDir
 						_, err := command.Output() //运行脚本
 						printError(err)
 						if command.ProcessState.Sys().(syscall.WaitStatus).ExitStatus() == 0 {
-
 						}
 					}
 				}
 			}
-
 		}
 		var end = time.Now()
 		fmt.Println("耗时：", end.Sub(start))
