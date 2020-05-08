@@ -48,7 +48,7 @@ func main() {
 	// 项目地址
 	ip := "http://10.100.58.218:9004/"
 	// 下载路径 注意结尾处的/
-	dir := "D:/WorkeSpace2.0/"
+	dir := "C:/LxZhang/WorkeSpace2.0/"
 	// 获取分组名称
 	url := ip + "/api/v4/namespaces?private_token=" + token
 	var start = time.Now()
@@ -69,7 +69,7 @@ func main() {
 					printError(err)
 				}
 				// 根据项目id获取项目信息
-				purl := ip + "/api/v4/groups/" + strconv.FormatInt(int64(id), 10) + "/projects?private_token=" + token
+				purl := ip + "/api/v4/groups/" + strconv.FormatInt(int64(id), 10) + "/projects?private_token=" + token + "&per_page=100"
 				presp := httpGet(purl)
 				pbody, _ := ioutil.ReadAll(presp.Body)
 				var pd []interface{}
